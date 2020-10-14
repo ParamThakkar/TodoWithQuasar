@@ -6,7 +6,7 @@
         <q-toolbar-title
           class="absolute-center"
         >
-          Quasar App
+          Todo App
         </q-toolbar-title>
 
       </q-toolbar>

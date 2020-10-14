@@ -2,7 +2,7 @@
   "name": "todo",
   "version": "0.0.1",
   "description": "A Quasar Framework app",
-  "productName": "Quasar App",
+  "productName": "Todo App",
   "author": "Param Thakkar <thakkarparam.2000@gmail.com>",
   "private": true,
   "scripts": {

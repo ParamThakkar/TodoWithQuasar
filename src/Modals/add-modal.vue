@@ -1,75 +1,25 @@
 <template>
     <q-card>
-        <q-card-section class="row">
-          <div class="text-h6">Add Task</div>
-          <q-space/>
-          <q-btn 
-            flat 
-            round 
-            dense 
-            icon="close" 
-            v-close-popup
-            />  
-        </q-card-section>
+        
+        <modal-header>Add Task</modal-header>
 
     <form @submit.prevent="submitForm()">
         <q-card-section class="q-pt-none">
-          <div class="row q-mb-sm">
-               <q-input 
-                outlined 
-                ref="name"
-                v-model="taskToSubmit.name" 
-                :rules="[val => !!val || 'Field is required']"
-                label="Task Name"/>
-          </div>
-
-          <div class="row q-mb-sm">
-              <q-input 
-              outlined 
-              v-model="taskToSubmit.dueDate"
-              label="Due Date">
-                <template v-slot:append>
-                    <q-icon name="event" class="cursor-pointer">
-                    <q-popup-proxy>
-                        <q-date v-model="taskToSubmit.dueDate"
-                        >
-                        
-                        </q-date>
-                    </q-popup-proxy>
-                    </q-icon>
-                </template>
-                </q-input>
-          </div>
-
-          <div class="row q-mb-sm">
-              <q-input 
-                outlined 
-                v-model="taskToSubmit.dueTime"
-                label="Due time"
-                >
-                    <template v-slot:append>
-                    <q-icon 
-                        name="access_time" class="cursor-pointer">
-                        <q-popup-proxy>
-                        <q-time 
-                            v-model="taskToSubmit.dueTime">
-                        </q-time>
-                        </q-popup-proxy>
-                    </q-icon>
-                    </template>
-                </q-input>
-          </div>
+          <modal-task-name :name.sync="taskToSubmit.name" />
+          <modal-task-dueDate :dueDate.sync="taskToSubmit.dueDate"/>
+          <modal-task-dueTime :dueTime.sync="taskToSubmit.dueTime" v-if="taskToSubmit.dueDate"/>
         </q-card-section>
 
         <q-card-actions align="right">
           <q-btn 
-            flat
+            
             type="submit" 
             label="Save" 
             color="primary" 
             />
         </q-card-actions>
     </form>
+   
     </q-card>
 </template>
 
@@ -101,6 +51,12 @@ export default {
         {
             this.addTask(this.taskToSubmit);
         }
+    },
+    components:{
+        'modal-header':require("../shared/modal-head").default,
+        'modal-task-name':require("../shared/ModalTaskName").default,
+        'modal-task-dueDate':require('../shared/ModalDueDate').default,
+        'modal-task-dueTime':require('../shared/ModalTaskDueTime').default
     }
 }
 </script>
