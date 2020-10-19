@@ -8,14 +8,19 @@
                 :value="name" 
                 :rules="[val => !!val || 'Field is required']"
                 autofocus
+                v-select-all
                 label="Task Name"
                 clearable/>
           </div>
 </template>
 
 <script>
+import {selectAll} from 'src/directives/selectAll'
 export default {
-    props:['name']
+    props:['name'],
+    directives:{
+        selectAll
+    }
 }
 </script>
 

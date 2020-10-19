@@ -10,7 +10,7 @@
           <q-popup-proxy>
             <q-date 
             :value="dueDate"
-            @input="$$emit('update:dueDate',$event)">
+            @input="$emit('update:dueDate',$event)">
              </q-date>
           </q-popup-proxy>
         </q-icon>

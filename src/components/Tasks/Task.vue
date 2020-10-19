@@ -4,6 +4,7 @@
         @click="updateTask({id:id , updates:{completed : !task.completed}})"
         clickable
         :class="!task.completed?'bg-orange-1':'bg-green-1'"
+        v-touch-hold:1000.mouse="showEditTaskModal"
         v-ripple
         bordered
         >
@@ -15,7 +16,8 @@
         <q-item-section>
           <q-item-label
             :class="{'text-strikethrough':task.completed}"
-          >{{task.name}}</q-item-label> 
+            v-html="$options.filters.searchHighlight(task.name , search)"
+          ></q-item-label> 
           
         </q-item-section>
          <q-item-section side top
@@ -32,18 +34,28 @@
                 <q-item-label
                  class="row justify-end"
                  caption>
-                    {{task.dueDate}}
+                    {{task.dueDate | niceDate}}
                 </q-item-label>
                 <q-item-label 
                   class="row justify-end"
                   caption>
-                  <small>{{task.dueTime}}</small>
+                  <small>{{dueTime}}</small>
                 </q-item-label>
               </div>
               
            </div>
          </q-item-section>
          <q-item-section side top>
+           <q-btn 
+           @click.stop="showEditTaskModal"
+           flat 
+           round 
+           dense
+           color="primary" 
+           icon="edit" />
+         </q-item-section>
+         <q-item-section side top>
+           
            <q-btn 
            @click.stop="promptDelete(id)"
            flat 
@@ -53,18 +65,46 @@
            icon="delete" />
          </q-item-section>
          
-
+      <q-dialog v-model="showEditTask">
+      <edit-task 
+        @close='showEditTask=false'
+        v-if="showEditTask"
+        :task="task"
+        :id="id"/>
+    </q-dialog>
+      
       </q-item>
       
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import {mapGetters , mapState} from 'vuex'
 import {mapActions} from 'vuex'
+import {date} from 'quasar'
 export default {
  props:['task','id'],
+ data()
+ {
+   return { 
+     showEditTask:false,
+   }
+ },
+ computed:{
+   ...mapState('tasks',['search']),
+   ...mapGetters('settings',['settings']),
+   dueTime(){
+     if(this.settings.show12HourFormat)
+     {
+       return date.formatDate(this.task.dueDate+' '+this.task.dueTime , 'h:mmA');
+     }
+     return this.task.dueTime;
+   }
+ },
  methods:{
-   
+   showEditTaskModal()
+   {
+     this.showEditTask = true;
+   },
    ...mapActions('tasks',['updateTask','deleteTask']),
    promptDelete(id)
    {
@@ -78,6 +118,31 @@ export default {
       }).onOk(() => {
         this.deleteTask(id);
       })
+   }
+ },
+ components:{
+   'edit-task':require('../../Modals/edit-task').default
+ },
+ filters:{
+   niceDate(value)
+   {
+     return date.formatDate(value , 'MMM D');
+   },
+   searchHighlight(value , search)
+   {
+     
+       
+     if(search)
+     {
+       
+       let searchRegEx = new RegExp(search,'ig');
+       return value.replace(searchRegEx , (match)=>{
+         
+         return '<span class="bg-yellow-6">'+match+'</span>';
+       })
+     }
+     
+     return value;
    }
  }
 }

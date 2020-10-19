@@ -1,0 +1,20 @@
+export default{
+    methods:{
+        submitForm()
+        {
+            this.$refs.modalTaskName.$refs.name.validate();
+            if(!this.$refs.modalTaskName.$refs.name.hasError)
+            {
+                this.submitTask();
+                this.$emit("close");
+            }
+        }
+    },
+    components:{
+        'modal-header':require("../shared/modal-head").default,
+        'modal-task-name':require("../shared/ModalTaskName").default,
+        'modal-task-dueDate':require('../shared/ModalDueDate').default,
+        'modal-task-dueTime':require('../shared/ModalTaskDueTime').default,
+        'modal-task-button':require('src/shared/ModalButton').default
+    }
+}
