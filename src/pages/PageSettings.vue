@@ -23,15 +23,51 @@
         </q-item-section>
       </q-item>
     </q-list>
+    <q-list bordered padding>
+
+      <q-item-label header>More</q-item-label>
+
+      <q-item 
+        tag="label" 
+        v-ripple
+        @click="visitOurWebsite()">
+        <q-item-section>
+          <q-item-label>VisitOurWebsite</q-item-label>
+        </q-item-section>
+        <q-item-section side >
+          <q-icon name="keyboard_arrow_right"></q-icon>
+        </q-item-section>
+      </q-item>
+      <q-item 
+        tag="label" 
+        v-ripple
+        @click="emailUs()">
+        <q-item-section>
+          <q-item-label>Email us</q-item-label>
+        </q-item-section>
+        <q-item-section side >
+          <q-icon name="keyboard_arrow_right"></q-icon>
+        </q-item-section>
+      </q-item>
+    </q-list>
   </div>
 </template>
 
 <script>
+import { openURL } from 'quasar'
 import {mapActions,mapGetters} from 'vuex'
 
 export default {
   methods:{
-    ...mapActions('settings',['setFormat','setListFormat'])
+    ...mapActions('settings',['setFormat','setListFormat']),
+    visitOurWebsite()
+    {
+      openURL('https://google.com')
+    },
+    emailUs()
+    {
+      window.location.href = 'mailto:thakkarparam.2000@gmail.com?subject=Todo feedback'
+    }
   },
   computed:{
     ...mapGetters('settings',['settings']),

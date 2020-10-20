@@ -8,7 +8,24 @@
         >
           Todo App
         </q-toolbar-title>
-
+        <q-btn
+          v-if="!this.loggedIn" 
+          class="absolute-right"
+          flat
+          color="white" 
+          icon-right="account_circle" 
+          label="LOGIN" 
+          to="/auth"
+          />
+          <q-btn
+          v-else
+          class="absolute-right"
+          @click="signOutUser()"
+          flat
+          color="white" 
+          label="Logout" 
+          to="/auth"
+          />
       </q-toolbar>
     </q-header>
     <q-footer>
@@ -66,6 +83,7 @@
 
 <script>
 import EssentialLink from 'components/EssentialLink.vue'
+import {mapState,mapActions} from 'vuex'
 
 const linksData = [
   {
@@ -88,6 +106,16 @@ export default {
     return {
       leftDrawerOpen: false,
       essentialLinks: linksData
+    }
+  },
+  computed:{
+    ...mapState('auth',['loggedIn'])
+  },
+  methods:{
+    ...mapActions('auth',['logoutUser']),
+    signOutUser()
+    {
+      this.logoutUser()
     }
   }
 }
